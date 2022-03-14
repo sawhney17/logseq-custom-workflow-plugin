@@ -1,6 +1,6 @@
 {
   "name": "logseq-custom-workflows",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Custom Workflows",
   "main": "dist/index.html",
   "targets": {
