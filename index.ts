@@ -76,6 +76,34 @@ let settings: SettingSchemaDesc[] = [
     description: "Choose your desired keyboard shortcut to toggle the changes",
     default: ""
   },
+  {
+    key: "CommaSeparatedOptions4",
+    type: "string",
+    title: "Options for Workflow 4",
+    description: "Enter your desired workflow options, separated by commas. i.e. 'TODO, DOING, WAITING, CANCELED'",
+    default: ""
+  },
+  {
+    key: "Keyboard-Shortcut4",
+    type: "string",
+    title: "keyboard shortcut for Workflow 4",
+    description: "Choose your desired keyboard shortcut to toggle the changes",
+    default: ""
+  },
+  {
+    key: "CommaSeparatedOptions5",
+    type: "string",
+    title: "Options for Workflow 5",
+    description: "Enter your desired workflow options, separated by commas. i.e. 'TODO, DOING, WAITING, CANCELED'",
+    default: ""
+  },
+  {
+    key: "Keyboard-Shortcut5",
+    type: "string",
+    title: "keyboard shortcut for Workflow 5",
+    description: "Choose your desired keyboard shortcut to toggle the changes",
+    default: ""
+  },
 ]
 logseq.useSettingsSchema(settings)
 const main = async () => {
@@ -84,11 +112,6 @@ const main = async () => {
     logseqSettings = logseq.settings
   }
   logseq.onSettingsChanged(updateSettings)
-  console.log('plugin loade2d');
-  console.log(logseq.settings['Keyboard-Shortcut'])
-  let array1 = [logseq.settings['CommaSeparatedOptions'], logseq.settings['Keyboard-Shortcut']]
-  let array2 = [logseq.settings['CommaSeparatedOptions2'], logseq.settings['Keyboard-Shortcut2']]
-  let array3 = [logseq.settings['CommaSeparatedOptions3'], logseq.settings['Keyboard-Shortcut3']]
   if (logseq.settings["Keyboard-Shortcut"] != "" && logseq.settings["CommaSeparatedOptions"] != "") {
     logseq.App.registerCommandPalette({
       key: 'Toggle-Workflow-State',
@@ -120,6 +143,28 @@ const main = async () => {
       }
     }, async (e) => {
       toggleState(logseqSettings["CommaSeparatedOptions3"], e)
+    });
+  }
+  if (logseq.settings["Keyboard-Shortcut4"] != "" && logseq.settings["CommaSeparatedOptions4"] != "") {
+    logseq.App.registerCommandPalette({
+      key: 'Toggle-Workflow-State4',
+      label: 'Toggle Workflow State4',
+      keybinding: {
+        binding: (logseq.settings["Keyboard-Shortcut4"])
+      }
+    }, async (e) => {
+      toggleState(logseqSettings["CommaSeparatedOptions4"], e)
+    });
+  }
+  if (logseq.settings["Keyboard-Shortcut5"] != "" && logseq.settings["CommaSeparatedOptions5"] != "") {
+    logseq.App.registerCommandPalette({
+      key: 'Toggle-Workflow-State5',
+      label: 'Toggle Workflow State5',
+      keybinding: {
+        binding: (logseq.settings["Keyboard-Shortcut5"])
+      }
+    }, async (e) => {
+      toggleState(logseqSettings["CommaSeparatedOptions5"], e)
     });
   }
 }
