@@ -3,8 +3,9 @@ import { SettingSchemaDesc } from '@logseq/libs/dist/LSPlugin.user';
 
 
 let logseqSettings = logseq.settings
-async function toggleState(SeparatedArray, e) {
-  let block = await logseq.Editor.getBlock(e.uuid)
+const stateOptions = ["Only Change current block", "Change current block and block below"]
+async function toggleState(SeparatedArray, uuid) {
+  let block = await logseq.Editor.getBlock(uuid)
   if (block != undefined) {
     let blockFirstWord = block.content.split(' ')[0].split('\n')[0]
     let commaSeparatedArray = SeparatedArray.split(", ")
@@ -21,7 +22,7 @@ async function toggleState(SeparatedArray, e) {
           finalText = commaSeparatedArray[index + 1]
           insertionTracker = true
         }
-        logseq.Editor.updateBlock(e.uuid, finalText + block.content.replace(blockFirstWord, ''))
+        logseq.Editor.updateBlock(uuid, finalText + block.content.replace(blockFirstWord, ''))
         break
       }
     }
@@ -49,11 +50,29 @@ let settings: SettingSchemaDesc[] = [
     default: "mod+shift+enter"
   },
   {
+    key: "ToggleStateofBlockBelow",
+    type: "enum",
+    title: "Toggle State of Block below",
+    description: "Toggle State of Block Below. i.e. if the top block was now, and the block below was TODO, the top block will become DONE and the bottom will become DOING",
+    enumChoices: stateOptions,
+    enumPicker: "radio",
+    default: "Only Change current block"
+  },
+  {
     key: "CommaSeparatedOptions2",
     type: "string",
     title: "Options for Workflow 2",
     description: "Enter your desired workflow options, separated by commas. i.e. 'TODO, DOING, WAITING, CANCELED'",
     default: ""
+  },
+  {
+    key: "ToggleStateofBlockBelow2",
+    type: "enum",
+    title: "Toggle State of Block below",
+    description: "Toggle State of Block Below. i.e. if the top block was now, and the block below was TODO, the top block will become DONE and the bottom will become DOING",
+    enumChoices: stateOptions,
+    enumPicker: "radio",
+    default: "Only Change current block"
   },
   {
     key: "Keyboard-Shortcut2",
@@ -70,6 +89,15 @@ let settings: SettingSchemaDesc[] = [
     default: ""
   },
   {
+    key: "ToggleStateofBlockBelow3",
+    type: "enum",
+    title: "Toggle State of Block below",
+    description: "Toggle State of Block Below. i.e. if the top block was now, and the block below was TODO, the top block will become DONE and the bottom will become DOING",
+    enumChoices: stateOptions,
+    enumPicker: "radio",
+    default: "Only Change current block"
+  },
+  {
     key: "Keyboard-Shortcut3",
     type: "string",
     title: "keyboard shortcut for Workflow 3",
@@ -84,6 +112,15 @@ let settings: SettingSchemaDesc[] = [
     default: ""
   },
   {
+    key: "ToggleStateofBlockBelow4",
+    type: "enum",
+    title: "Toggle State of Block below",
+    description: "Toggle State of Block Below. i.e. if the top block was now, and the block below was TODO, the top block will become DONE and the bottom will become DOING",
+    enumChoices: stateOptions,
+    enumPicker: "radio",
+    default: "Only Change current block"
+  },
+  {
     key: "Keyboard-Shortcut4",
     type: "string",
     title: "keyboard shortcut for Workflow 4",
@@ -96,6 +133,15 @@ let settings: SettingSchemaDesc[] = [
     title: "Options for Workflow 5",
     description: "Enter your desired workflow options, separated by commas. i.e. 'TODO, DOING, WAITING, CANCELED'",
     default: ""
+  },
+  {
+    key: "ToggleStateofBlockBelow5",
+    type: "enum",
+    title: "Toggle State of Block below",
+    description: "Toggle State of Block Below. i.e. if the top block was now, and the block below was TODO, the top block will become DONE and the bottom will become DOING",
+    enumChoices: stateOptions,
+    enumPicker: "radio",
+    default: "Only Change current block"
   },
   {
     key: "Keyboard-Shortcut5",
@@ -120,7 +166,13 @@ const main = async () => {
         binding: (logseq.settings["Keyboard-Shortcut"])
       }
     }, async (e) => {
-      toggleState(logseqSettings["CommaSeparatedOptions"], e)
+      if (logseq.settings["ToggleStateofBlockBelow"] == "Only Change current block") {
+        toggleState(logseqSettings["CommaSeparatedOptions"], e.uuid)
+      }
+      else {
+        toggleState(logseqSettings["CommaSeparatedOptions"], e.uuid)
+        toggleState(logseqSettings["CommaSeparatedOptions"], (await logseq.Editor.getNextSiblingBlock(e.uuid)).uuid)
+      }
     })
   };
   if (logseq.settings["Keyboard-Shortcut2"] != "" && logseq.settings["CommaSeparatedOptions2"] != "") {
@@ -131,7 +183,13 @@ const main = async () => {
         binding: (logseq.settings["Keyboard-Shortcut2"])
       }
     }, async (e) => {
-      toggleState(logseqSettings["CommaSeparatedOptions2"], e)
+      if (logseq.settings["ToggleStateofBlockBelow2"] == "Only Change current block") {
+        toggleState(logseqSettings["CommaSeparatedOptions2"], e.uuid)
+      }
+      else {
+        toggleState(logseqSettings["CommaSeparatedOptions2"], e.uuid)
+        toggleState(logseqSettings["CommaSeparatedOptions2"], (await logseq.Editor.getNextSiblingBlock(e.uuid)).uuid)
+      }
     });
   }
   if (logseq.settings["Keyboard-Shortcut3"] != "" && logseq.settings["CommaSeparatedOptions3"] != "") {
@@ -142,7 +200,13 @@ const main = async () => {
         binding: (logseq.settings["Keyboard-Shortcut3"])
       }
     }, async (e) => {
-      toggleState(logseqSettings["CommaSeparatedOptions3"], e)
+      if (logseq.settings["ToggleStateofBlockBelow3"] == "Only Change current block") {
+        toggleState(logseqSettings["CommaSeparatedOptions3"], e.uuid)
+      }
+      else {
+        toggleState(logseqSettings["CommaSeparatedOptions3"], e.uuid)
+        toggleState(logseqSettings["CommaSeparatedOptions3"], (await logseq.Editor.getNextSiblingBlock(e.uuid)).uuid)
+      }
     });
   }
   if (logseq.settings["Keyboard-Shortcut4"] != "" && logseq.settings["CommaSeparatedOptions4"] != "") {
@@ -153,7 +217,13 @@ const main = async () => {
         binding: (logseq.settings["Keyboard-Shortcut4"])
       }
     }, async (e) => {
-      toggleState(logseqSettings["CommaSeparatedOptions4"], e)
+      if (logseq.settings["ToggleStateofBlockBelow4"] == "Only Change current block") {
+        toggleState(logseqSettings["CommaSeparatedOptions4"], e.uuid)
+      }
+      else {
+        toggleState(logseqSettings["CommaSeparatedOptions4"], e.uuid)
+        toggleState(logseqSettings["CommaSeparatedOptions4"], (await logseq.Editor.getNextSiblingBlock(e.uuid)).uuid)
+      }
     });
   }
   if (logseq.settings["Keyboard-Shortcut5"] != "" && logseq.settings["CommaSeparatedOptions5"] != "") {
@@ -164,7 +234,13 @@ const main = async () => {
         binding: (logseq.settings["Keyboard-Shortcut5"])
       }
     }, async (e) => {
-      toggleState(logseqSettings["CommaSeparatedOptions5"], e)
+      if (logseq.settings["ToggleStateofBlockBelow5"] == "Only Change current block") {
+        toggleState(logseqSettings["CommaSeparatedOptions5"], e.uuid)
+      }
+      else {
+        toggleState(logseqSettings["CommaSeparatedOptions5"], e.uuid)
+        toggleState(logseqSettings["CommaSeparatedOptions5"], (await logseq.Editor.getNextSiblingBlock(e.uuid)).uuid)
+      }
     });
   }
 }
