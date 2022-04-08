@@ -166,7 +166,13 @@ const main = async () => {
         binding: (logseq.settings["Keyboard-Shortcut"])
       }
     }, async (e) => {
-      if (logseq.settings["ToggleStateofBlockBelow"] == "Only Change current block") {
+      const blocks = await logseq.Editor.getSelectedBlocks()
+      if (blocks.length > 0 ){
+        for (const x in blocks){
+          toggleState(logseqSettings["CommaSeparatedOptions"], blocks[x].uuid)
+        }
+      }
+      else if (logseq.settings["ToggleStateofBlockBelow"] == "Only Change current block") {
         toggleState(logseqSettings["CommaSeparatedOptions"], e.uuid)
       }
       else {
