@@ -1,6 +1,6 @@
 {
   "name": "logseq-custom-workflows",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "Custom Workflows",
   "main": "dist/index.html",
   "targets": {
@@ -14,7 +14,8 @@
   "author": "Aryan Sawhney",
   "license": "MIT",
   "dependencies": {
-    "@logseq/libs": "0.0.1-alpha.35"
+    "@logseq/libs": "0.0.6",
+    "logseq-dateutils": "^0.0.21"
   },
   "logseq": {
     "id": "logseq-custom-workflows",
