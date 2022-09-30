@@ -3,7 +3,6 @@ import { SettingSchemaDesc } from '@logseq/libs/dist/LSPlugin.user';
 import  'logseq-dateutils';
 import { getDateForPageWithoutBrackets } from 'logseq-dateutils';
 
-let logseqSettings = logseq.settings
 const stateOptions = ["Only Change current block", "Change current block and block below"]
 const parseTemplate = async (template) => {
   //Create a date object iwth today's date
@@ -248,6 +247,7 @@ let settings: SettingSchemaDesc[] = [
 ]
 logseq.useSettingsSchema(settings)
 const main = async () => {
+  let logseqSettings = logseq.settings
 
   function updateSettings() {
     logseqSettings = logseq.settings
